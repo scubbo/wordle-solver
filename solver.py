@@ -13,18 +13,17 @@ Terminology:
 ** Note that these are in decreasing order of binding. For instance, for the guess "spine" and answer "apple", the second guess-letter (P) is Correct, not Present (even though there is also a P in the 3rd position of the answer)
 * All ordinals are human-readable text are 1-indexed
 """
-import sys
-
 from collections import defaultdict
 from enum import Enum, auto
 from heapq import heappush, nlargest, nsmallest
 
 # If I were being really strict about organization, `State` should probably live in a separate module.
 from data import ALLOWED_GUESSES, WORD_LIST, State
+from progress_bar import progressbar
 
 def main():
   guesses_heap = []
-  for guess in progressbar(ALLOWED_GUESSES, "Computing: "):
+  for guess in progressbar(ALLOWED_GUESSES):
     cost = findCostOfPartitioning(determinePartitionSizes(guess, WORD_LIST))
     heappush(guesses_heap, (cost, guess))
   print('Best guesses:')
@@ -90,21 +89,6 @@ def determinePartitionSizes(wordGuess, wordList):
   assert (sum(partitionSizes.values()) == len(wordList))
 
   return partitionSizes
-
-# https://stackoverflow.com/a/34482761/1040915
-def progressbar(it, prefix="", size=60, file=sys.stdout):
-  count = len(it)
-  def show(j):
-    x = int(size*j/count)
-    file.write("%s[%s%s] %i/%i\r" % (prefix, "#"*x, "."*(size-x), j, count))
-    file.flush()
-  show(0)
-  for i, item in enumerate(it):
-    yield item
-    show(i+1)
-  file.write("\n")
-  file.flush()
-
 
 if __name__ == '__main__':
   main()
