@@ -42,7 +42,9 @@ def main():
       results.append(guess_pair)
   for result in results:
     print(result)
-  print(f' There are {len(results)} pairs')
+    # /2 since `(a,b)` and `(b,a)` will be counted.
+    # Could maybe fix that (and optimize!) by splitting guess_subset in half and taking the product of the halves.
+  print(f' There are {len(results)/2} pairs')
 
 
 if __name__ == '__main__':
