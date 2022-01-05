@@ -31,7 +31,7 @@ var infoSpan = createInfoSpan();
 // Cannot do this update during `createInfoSpan`, because it relies on `infoSpan` existing as a global variable (sigh)
 updateInfoSpan(getLatestPossibleAnswers().length, getPreviousNumAnswers()); // It's ok if the latter is null!
 
-this.addEventListener('keypress', event => {
+window.addEventListener('keypress', event => {
   if (event.keyCode == 13) {
     // Give a little time just in case it's necessary before localStorage updates
     // (in testing, I haven't seen any race condition failures - but better safe than sorry!)
@@ -60,12 +60,12 @@ function process() {
     appendToArrayTypeStorageProperty(ASSIST_STATE_KEY, 'possibleAnswersHistory', newPossibilities);
     updateInfoSpan(newPossibilities.length, getPreviousNumAnswers());
     } catch (err) {
-    console.error(err); 
+    console.error(err);
   }
 }
 
 function buildFilters() {
-  var gameState = JSON.parse(window.localStorage[GAME_STATE_KEY]); 
+  var gameState = JSON.parse(window.localStorage[GAME_STATE_KEY]);
   var latestRowNum = gameState['rowIndex']-1;
   var latestGuess = gameState['boardState'][latestRowNum];
   var latestEvaluations = gameState['evaluations'][latestRowNum];
@@ -80,7 +80,7 @@ function buildFilter(letter, evaluation, position_inp) {
   // Without this `let`, `position` within a lambda execution always resolves to 5. IDK why!
   // TODO: ask Stack Overflow why :P
   let position = position_inp;
-  
+
   if (evaluation == 'correct') {
     if (verboseLogging) {
         console.log(`Returning a correct filter for ${letter} at ${position}`);
@@ -96,10 +96,10 @@ function buildFilter(letter, evaluation, position_inp) {
       return ret;
     }
   }
-  
+
   if (evaluation == 'present') {
     if (verboseLogging) {
-      console.log(`Returning a present filter for ${letter} not-at ${position}`); 
+      console.log(`Returning a present filter for ${letter} not-at ${position}`);
     }
     return (word) => {
       if (verboseLogging) {
@@ -112,9 +112,9 @@ function buildFilter(letter, evaluation, position_inp) {
       return ret;
     }
   }
-  
+
   if (verboseLogging) {
-    console.log(`Returning an absent filter for ${letter}`); 
+    console.log(`Returning an absent filter for ${letter}`);
   }
   return (word) => {
     if (verboseLogging) {
@@ -126,7 +126,7 @@ function buildFilter(letter, evaluation, position_inp) {
     }
     return ret;
   }
-  
+
 }
 
 // Returns the infoSpan so that it can be declared as a global variable, thus meaning
@@ -139,12 +139,12 @@ function createInfoSpan() {
   board.prepend(infoSpan);
   return infoSpan;
 }
-  
+
 function updateInfoSpan(current, previous) {
   if (previous === undefined || previous == null) {
     infoSpan.innerHTML = `Possible words: ${current}<br/>`;
   } else {
-    infoSpan.innerHTML = `Possible words: ${current}<br/>(Down from ${previous})`; 
+    infoSpan.innerHTML = `Possible words: ${current}<br/>(Down from ${previous})`;
   }
 }
 
@@ -156,7 +156,7 @@ function updateInfoSpanWithFinalContent() {
     if (entry.length <= 10) {
       outputText += `<br/>Guess ${i+1}: ${entry.join(',')}`;
     } else {
-      outputText += `<br/>Guess ${i+1}: ${entry.length} possible answers`; 
+      outputText += `<br/>Guess ${i+1}: ${entry.length} possible answers`;
     }
   }
   infoSpan.innerHTML = outputText;
@@ -164,7 +164,7 @@ function updateInfoSpanWithFinalContent() {
 
 // Helper method to get a property within a JSON-encoded localStorage entry
 function getStorageProperty(key, subkey) {
-  return JSON.parse(window.localStorage[key])[subkey]; 
+  return JSON.parse(window.localStorage[key])[subkey];
 }
 
 // Helper method to set a property within a JSON-encoded localStorage entry
@@ -200,6 +200,6 @@ function areYouAWinner() {
   try {
     return getStorageProperty(GAME_STATE_KEY, 'evaluations')[getStorageProperty(GAME_STATE_KEY, 'rowIndex')-1].every((ev) => ev == 'correct');
   } catch (err) {
-    return false; 
+    return false;
   }
 }
