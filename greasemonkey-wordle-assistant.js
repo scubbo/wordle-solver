@@ -25,7 +25,7 @@ verboseLogging = false;
 var board = document.getElementsByTagName('game-app')[0].shadowRoot.getElementById('board');
 var infoSpan = document.createElement('span');
 infoSpan.setAttribute('id', 'infoSpan');
-infoSpan.setAttribute('style', 'color: white');
+infoSpan.setAttribute('style', 'color: var(--color-tone-2);');
 if ('previousNumAnswers' in loadedAssistanceState) {
   updateInfoSpan(window.possibleAnswers.length, loadedAssistanceState['previousNumAnswers']);
 } else {
