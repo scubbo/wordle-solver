@@ -64,7 +64,7 @@ def determinePartitionSizes(wordGuess, wordList):
   """
   Determine the sizes of the partitions that guessing `word` divides `wordList` into based on the possible responses.
 
-  The wordList will be split into (5^3=)125 partitions, since there are 3 states for each of the 5 letters in the guess
+  The wordList will be split into (3^5=)243 partitions, since there are 3 states for each of the 5 letters in the guess
   (correct, present, and absent). Assuming that each word in the wordList is equally likely to be the answer, the best
   guess should be the one that splits the partitions most evenly, since that is most likely to give the most information.
   (TODO: elaborate on this in blog post - consider binary search, larger probability that target is in larger section)
